@@ -1,45 +1,61 @@
-# This program creates a investment calculator and a home loan repayment calculator.  
+# Writing a program for a small financial company to access two financial calculators.
+# This will include an investment calculator and a home loan repayment calculator.
+
 import math
-import sys 
+
+# Getting input from user on their choice of calculator i.e. investment or bond. 
+calculation_type = input("""Choose either 'investment' or 'bond' from the menu below to proceed:
+
+                            investment      - to calculate the amount of interest you'll earn on interest
+                            bond            - to calculate the amount you'll have to pay on a home loan
+
+""")
+
+# Lower function used to set all input characters to lowercase.
+# This will ensure that all options (e.g. Investment or investment etc.) are accepted into the conditional statement.
+# Input sanitization further done with replace() function to remove any spaces entered by the user by mistake.
+calculation_type = calculation_type.lower().replace(" ", "")
+
+print()         # Blank line added for better presentation. 
 
 
-# This bit of code requests the type of calculation the user wants to do.
-print("Choose either 'investment' or 'bond' from the menu below to proceed: ")
-print("investment \t - to calculate the amount of interest you'll earn on interest")
-print("bond \t\t - to calculate the amount you'll have to pay on a home loan ")
-calculator_type = input("Selection: ") 
-
-# This bit of code performs a condition to find out the investment interest and/or interest.
-if calculator_type == "investment" or calculator_type == "Investment" or calculator_type == "INVESTMENT":
-    money_amount = float(input("Money deposit amount: "))
-    interest_rate = float(input("The interest rate: "))
-    yearsOfplan = float(input("How many years you intend to invest: "))        
-    interest = input("simple interest or compound interest: ")
-
-elif calculator_type == "Bond" or calculator_type == "bond" or calculator_type == "BOND":
-    house_value = float(input("House value amount: "))
-    bond_interest_rate = float(input("The interest rate: ")) 
-    bond_yearsOfplan = float(input("How many months you intend to repay the bond: "))
-    bond_repayment = (bond_interest_rate/12*house_value)/(1 - (1+bond_interest_rate/12)**(-bond_yearsOfplan))
-    print("Total amount: ", bond_repayment)    
-    sys.exit() 
+# Creating conditional statement to determine output actions depending on the calculator chosen.
+# Getting input from user on amount, rate, years and interest type to enter into investment calculator.
+if calculation_type == "investment":
     
-else:
-        print(sys.exit())
+    deposit_amount = float(input("Please enter the amount of money you wish to deposit: \n"))                
+    interest_rate = int(input("Please enter your interest rate as a number (e.g. 1, 2, 3 etc.): \n"))
+    num_years = int(input("Please enter the number of years you plan on investing for: \n"))
+    interest_type = input("Please enter your investment choice type: (simple or compound) \n")
+     
+# Creating indented conditional statement to display the results based on user's choice of interest type.
+# Entering formulas for simple and compound interest depending on user choice. 
+    if interest_type == "simple":
+        simple_interest = round(deposit_amount*(1 + (interest_rate/100)* num_years), 2)
+        print()
+        print("After {} years of investing at {}% interest rate, you will earn R{}.".format(num_years, interest_rate, simple_interest))
 
-#All investment calculations below.   
-# This bit of code performs a condition to find out the total amount of the selected interest. 
-if interest == "simple interest": 
-    total_simple_interest = money_amount*(1+(interest_rate/100)*yearsOfplan)
-    print("Total amount: ", total_simple_interest)
+    elif interest_type == "compound":
+        compound_interest = round(deposit_amount* math.pow((1 + interest_rate/100), num_years), 2)
+        print()
+        print("After {} years of investing at {}% interest rate, you will earn R{}.".format(num_years, interest_rate, compound_interest))  
 
-elif interest == "compound interest":
-    total_compound_interest = money_amount* math.pow((1+interest_rate/100),yearsOfplan)
-    print("Total amount: ", total_compound_interest)
+# Introducing second part of conditional statement for bond calculator.
+# Getting input from user on house value, interest rate and number of months taken to pay bond, to enter into bond calculator.
+elif calculation_type == "bond":
     
+    house_value = int(input("Please enter the present value of the house: \n"))
+    interest_rate = int(input("Please enter your interest rate as a number (e.g. 1, 2, 3 etc.): \n"))
+    num_months = int(input("Please enter the number of months you plan to take to repay the bond: \n"))
+    
+# Entering Formula for bond calculator.    
+    monthly_payment = round((interest_rate/100/12 * house_value) / (1 - math.pow((1+ interest_rate/100/12), (-1 * num_months))), 2)
+
+# Displaying monthly payment results.  
+    print("Your monthly repayment amount for the home loan is equal to R{}.".format(monthly_payment))
+
+# Displaying error message if the user did not enter either 'investment' or 'bond' choice.
+# From here on the same conditional statement with the if and elif controls (as show above) and their respective actions are repeated to receive input for the investment or bond calculator.
 else:
-        print("Interest type not selected.", sys.exit())
-                
-# Code ends here  
+    print("You have made an incorrect selection. Please choose either 'investment' or 'bond'.")
   
- 
